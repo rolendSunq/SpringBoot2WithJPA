@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.gson.Gson;
 import com.springboot.jpa.web.repository.User;
 import com.springboot.jpa.web.repository.UserRepository;
 
@@ -41,7 +42,9 @@ public class Login_outController {
 			return "redirect:/users/login";
 		}
 		
-		session.setAttribute("user", user);
+		String jsonStr = new Gson().toJson(user, User.class);
+		System.out.println("session user: " + jsonStr);
+		session.setAttribute("user", jsonStr);
 		
 		return "redirect:/users";
 	}
