@@ -1,10 +1,13 @@
 package com.springboot.jpa.web.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,13 +48,35 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}/form", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("id") Long id, Model model) {
+	public String updatePage(@PathVariable("id") Long id, Model model, HttpSession session) {
+		User sessionUser = (User) session.getAttribute("sessionUser");
+		
+		if (ObjectUtils.isEmpty(sessionUser)) {
+			return "redirect:/users/loginForm";
+		}
+		
+		if (id != sessionUser.getId()) {
+			session.removeAttribute("sessionUser");
+			throw new IllegalStateException("올바른 접근 경로가 아닙니다.");
+		}
+		
 		model.addAttribute("user", userRepository.getOne(id));
 		return "/user/updateForm";
 	}
 	
 	@PutMapping("/{id}")
-	public String update(@PathVariable("id") Long id, User user) {
+	public String update(@PathVariable("id") Long id, User user, HttpSession session) {
+		User sessionUser = (User) session.getAttribute("sessionUser");
+		
+		if (ObjectUtils.isEmpty(sessionUser)) {
+			return "redirect:/users/loginForm";
+		}
+		
+		if (id != sessionUser.getId()) {
+			session.removeAttribute("sessionUser");
+			throw new IllegalStateException("올바른 접근 경로가 아닙니다.");
+		}
+		
 		User findUser= userRepository.getOne(id);
 		findUser.update(user);
 		userRepository.save(findUser);

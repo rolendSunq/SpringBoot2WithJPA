@@ -1,1 +1,2 @@
 insert into user (userid, password, username, email) values ('doomguy', '12345', 'handerson', 'handerson@naver.com')
+insert into user (userid, password, username, email) values ('tessadar', '12345', 'enTaroTessadar', 'enTaroTessadar@naver.com')

@@ -42,10 +42,14 @@ public class Login_outController {
 			return "redirect:/users/login";
 		}
 		
-		String jsonStr = new Gson().toJson(user, User.class);
-		System.out.println("session user: " + jsonStr);
-		session.setAttribute("user", jsonStr);
+		session.setAttribute("sessionUser", user);
 		
 		return "redirect:/users";
+	}
+	
+	@GetMapping("logout")
+	public String logoutCTRL(HttpSession session) {
+		session.removeAttribute("sessionUser");
+		return "redirect:/";
 	}
 }
