@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springboot.jpa.web.repository.User;
 import com.springboot.jpa.web.repository.UserRepository;
+import com.springboot.jpa.web.service.SessionService;
 
 
 @RequestMapping("/users")
@@ -24,6 +25,9 @@ import com.springboot.jpa.web.repository.UserRepository;
 public class UserController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private SessionService sessionService;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -48,15 +52,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}/form", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("id") Long id, Model model, HttpSession session) {
-		User sessionUser = (User) session.getAttribute("sessionUser");
+	public String updatePage(@PathVariable("id") Long id, Model model, HttpSession session) throws Exception {
+		User sessionUser = sessionService.getObjectFromSession(session);
 		
-		if (ObjectUtils.isEmpty(sessionUser)) {
+		if (!sessionService.isExistanceSession(session)) {
 			return "redirect:/users/loginForm";
 		}
 		
 		if (id != sessionUser.getId()) {
-			session.removeAttribute("sessionUser");
+			sessionService.removeSession(session);
 			throw new IllegalStateException("올바른 접근 경로가 아닙니다.");
 		}
 		
@@ -65,15 +69,15 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public String update(@PathVariable("id") Long id, User user, HttpSession session) {
+	public String update(@PathVariable("id") Long id, User user, HttpSession session) throws Exception {
 		User sessionUser = (User) session.getAttribute("sessionUser");
 		
-		if (ObjectUtils.isEmpty(sessionUser)) {
+		if (!sessionService.isExistanceSession(session)) {
 			return "redirect:/users/loginForm";
 		}
 		
 		if (id != sessionUser.getId()) {
-			session.removeAttribute("sessionUser");
+			sessionService.removeSession(session);
 			throw new IllegalStateException("올바른 접근 경로가 아닙니다.");
 		}
 		

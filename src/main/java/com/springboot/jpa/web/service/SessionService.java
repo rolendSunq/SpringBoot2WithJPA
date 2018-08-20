@@ -7,5 +7,6 @@ public interface SessionService {
 	public <T> void createSession(HttpSession session, T t) throws Exception;
 	public void removeSession(HttpSession session) throws Exception;
 	public boolean isExistanceSession(HttpSession session);
-	public String getPathSession(HttpSession session, String path);
+	public boolean isLoginSession(HttpSession session);
+	public <T> T getObjectFromSession(HttpSession session);
 }

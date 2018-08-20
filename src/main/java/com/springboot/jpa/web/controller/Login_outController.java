@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.gson.Gson;
 import com.springboot.jpa.web.repository.User;
 import com.springboot.jpa.web.repository.UserRepository;
+import com.springboot.jpa.web.service.SessionService;
 
 @RequestMapping("/users/")
 @Controller
@@ -23,6 +24,9 @@ public class Login_outController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private SessionService sessionService;
+	
 	@GetMapping("login")
 	public String loginPageCTRL() {
 		logger.info("loginCTRL Enter.");
@@ -30,7 +34,7 @@ public class Login_outController {
 	}
 	
 	@PostMapping("login")
-	public String loginCTRL(HttpSession session, String userid, String password) {
+	public String loginCTRL(HttpSession session, String userid, String password) throws Exception {
 		logger.debug("userid: " + userid + ", password: " + password);
 		User user = userRepository.findByUserId(userid);
 		
@@ -42,14 +46,14 @@ public class Login_outController {
 			return "redirect:/users/login";
 		}
 		
-		session.setAttribute("sessionUser", user);
+		sessionService.createSession(session, user);
 		
 		return "redirect:/users";
 	}
 	
 	@GetMapping("logout")
-	public String logoutCTRL(HttpSession session) {
-		session.removeAttribute("sessionUser");
+	public String logoutCTRL(HttpSession session) throws Exception {
+		sessionService.removeSession(session);
 		return "redirect:/";
 	}
 }

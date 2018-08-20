@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.springboot.jpa.web.repository.User;
+
 @Service
 public class SessionServiceImpl implements SessionService {
 
@@ -30,14 +32,33 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	public boolean isExistanceSession(HttpSession session) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		if (ObjectUtils.isEmpty(session)) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override
-	public String getPathSession(HttpSession session, String path) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isLoginSession(HttpSession session) {
+		User sessionUser = (User) session.getAttribute(SESSION_KEY);
+		
+		if (ObjectUtils.isEmpty(sessionUser)) {
+			return false;
+		}
+		
+		return true;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getObjectFromSession(HttpSession session) {
+		
+		if (!isLoginSession(session)) {
+			return null;
+		}
+		
+		return (T) session.getAttribute(SESSION_KEY);
+	}
 }
