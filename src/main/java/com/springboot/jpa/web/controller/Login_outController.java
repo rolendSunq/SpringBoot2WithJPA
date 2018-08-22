@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.google.gson.Gson;
 import com.springboot.jpa.web.repository.User;
 import com.springboot.jpa.web.repository.UserRepository;
 import com.springboot.jpa.web.service.SessionService;
