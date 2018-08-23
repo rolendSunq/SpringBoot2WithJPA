@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.springboot.jpa.web.repository.QuestionAnswerBoard;
+import com.springboot.jpa.web.repository.QuestionAnswerBoardRepository;
 import com.springboot.jpa.web.repository.User;
 import com.springboot.jpa.web.service.SessionService;
 
-@RequestMapping("/questions/")
+@RequestMapping("/questions")
 @Controller
 public class QuestionController {
 	private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
@@ -22,7 +23,10 @@ public class QuestionController {
 	@Autowired
 	SessionService sessionService;
 	
-	@GetMapping("form")
+	@Autowired
+	private QuestionAnswerBoardRepository qabr;
+	
+	@GetMapping("/form")
 	public String qnaFormPage(HttpSession session) {
 		logger.debug("qnaFormPage Enter");
 		
@@ -33,16 +37,17 @@ public class QuestionController {
 		return "/qna/form";
 	}
 	
-	@PostMapping("")
-	public String createQna(HttpSession session, String title, String content) {
-		
+	@PostMapping
+	public String createQna(HttpSession session, String title, String contents) {
+		System.out.println("createQna Enter");
 		if (sessionService.isLoginSession(session)) {
 			return "/users/form";
 		}
 		
 		User sessionUser = sessionService.getObjectFromSession(session);
-		QuestionAnswerBoard qab = new QuestionAnswerBoard(title, sessionUser.getUserid(), content);
+		QuestionAnswerBoard qab = new QuestionAnswerBoard(title, sessionUser.getUserid(), contents);
+		qabr.save(qab);
 		
-		return "redirect:/";
+		return "index";
 	}
 }

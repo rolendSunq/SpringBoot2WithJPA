@@ -15,13 +15,13 @@ public class QuestionAnswerBoard {
 
 	private String title;
 	private String writer;
-	private String content;
+	private String contents;
 
-	public QuestionAnswerBoard(String title, String writer, String content) {
+	public QuestionAnswerBoard(String title, String writer, String contents) {
 		super();
 		this.title = title;
 		this.writer = writer;
-		this.content = content;
+		this.contents = contents;
 	}
 
 	public Long getId() {
@@ -49,11 +49,11 @@ public class QuestionAnswerBoard {
 	}
 
 	public String getContent() {
-		return content;
+		return contents;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setContent(String contents) {
+		this.contents = contents;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class QuestionAnswerBoard {
 		return new StringBuffer("QuestionAnswerBoard [id=").append( id )
 				.append(", title=").append( title )
 				.append(", writer=").append( writer )
-				.append(", content=").append( content )
+				.append(", contents=").append( contents )
 				.append("]").toString();
 	}
 
