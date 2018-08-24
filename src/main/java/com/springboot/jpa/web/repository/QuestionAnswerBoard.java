@@ -17,6 +17,10 @@ public class QuestionAnswerBoard {
 	private String writer;
 	private String contents;
 
+	public QuestionAnswerBoard() {
+		// Empty
+	}
+	
 	public QuestionAnswerBoard(String title, String writer, String contents) {
 		super();
 		this.title = title;

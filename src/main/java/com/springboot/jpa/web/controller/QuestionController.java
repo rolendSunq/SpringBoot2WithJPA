@@ -40,14 +40,17 @@ public class QuestionController {
 	@PostMapping
 	public String createQna(HttpSession session, String title, String contents) {
 		System.out.println("createQna Enter");
-		if (sessionService.isLoginSession(session)) {
-			return "/users/form";
+		
+		if (!sessionService.isLoginSession(session)) {
+			return "redirect:/users/form";
 		}
 		
 		User sessionUser = sessionService.getObjectFromSession(session);
 		QuestionAnswerBoard qab = new QuestionAnswerBoard(title, sessionUser.getUserid(), contents);
 		qabr.save(qab);
 		
-		return "index";
+		System.out.println("createQna End");
+		
+		return "redirect:/";
 	}
 }
