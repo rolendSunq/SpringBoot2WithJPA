@@ -46,7 +46,7 @@ public class QuestionController {
 		}
 		
 		User sessionUser = sessionService.getObjectFromSession(session);
-		QuestionAnswerBoard qab = new QuestionAnswerBoard(title, sessionUser.getUserid(), contents);
+		QuestionAnswerBoard qab = new QuestionAnswerBoard(title, sessionUser, contents);
 		qabr.save(qab);
 		
 		System.out.println("createQna End");
